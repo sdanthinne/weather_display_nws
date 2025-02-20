@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+ <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+               crossorigin=""></script>
+
+
+<div>
+    <div id="map" style="width: 600px; height: 400px;"></div>
+    <form action="/display" method="GET">
+        <input type="hidden" id="lat" name="lat" required />
+        <input type="hidden" id="lng" name="lng" required />
+        <button type="submit">Get Weather</button>
+    </form>
+
+    <div id="history_list">
+    {% for location in location_history %}
+    <form action="/display" method="GET">
+            <input type="hidden" id="lat" name="lat" required value="{{location.latitude}}"/>
+            <input type="hidden" id="lng" name="lng" required value="{{location.longitude}}"/>
+            <button type="submit">{{location.latitude}},{{location.longitude}}</button>
+    </form>
+    {% endfor %}
+    </div>
+</div>
+<script>
+    // Initialize the Leaflet map
+    var map = L.map('map').setView([37.778, -122.418], 13);  // Default position (London)
+
+    // Set up the tile layer for the map
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Variable to hold the selected marker
+    var marker;
+
+    // Event listener for map click to place a marker
+    map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lng = e.latlng.lng;
+
+            // Remove any existing marker
+            if (marker) {
+                        map.removeLayer(marker);
+                    }
+
+            // Place a new marker at the clicked position
+            marker = L.marker([lat, lng]).addTo(map);
+
+            // Set the hidden input fields in the form to the coordinates
+            document.getElementById('lat').value = lat;
+            document.getElementById('lng').value = lng;
+    });
+</script>
+
+
+{% endblock %}

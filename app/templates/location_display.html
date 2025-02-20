@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<meta http-equiv="refresh" content="600">
+<div>
+    <table>
+        <tr>
+            <th>Day</th>
+            <th>Low (F)</th>
+            <th>High (F)</th>
+            <th>Precipitation</th>
+            <th>Wind</th>
+        </tr>
+        {% for predict in predict_days %}
+        <tr>
+            <td></td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+
+{% endblock %}
