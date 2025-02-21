@@ -21,7 +21,7 @@
     <form action="/display" method="GET">
             <input type="hidden" id="lat" name="lat" required value="{{location.latitude}}"/>
             <input type="hidden" id="lng" name="lng" required value="{{location.longitude}}"/>
-            <button type="submit">{{location.latitude}},{{location.longitude}}</button>
+            <button type="submit">{{location._name}}</button>
     </form>
     {% endfor %}
     </div>

@@ -13,6 +13,10 @@ from weather_gov_api_client.api.default import point
 from weather_gov_api_client.models.point import Point
 from weather_gov_api_client.models.point_geo_json import PointGeoJson
 
+from weather_gov_api_client.api.default import gridpoint
+from weather_gov_api_client.models.gridpoint_geo_json import GridpointGeoJson
+from weather_gov_api_client.models.gridpoint import Gridpoint
+
 logger = logging.getLogger()
 
 app = FastAPI()
@@ -32,21 +36,18 @@ class Location():
         lat_format, long_format = self.format
         pt:PointGeoJson = point.sync(f"{lat_format},{long_format}", client=client)
         return pt
-        
-    def to_gridpoint(self):
-        x = 0
-        y = 0
-        pt = self.request()
-        pt = Point.from_dict(pt.to_dict()) #conversion from geoJson to regular Point
-        print(pt)
-        return pt.grid_x, pt.grid_y
 
     @property
-    def forecast(self):
-        pt_json = self.request()
-        pt = Point.from_dict(pt_json.to_dict())
-        return pt.forecast
+    def point(self) -> Point:
+        pt = self.request()
+        return Point.from_dict(pt.properties.to_dict())
 
+    @property
+    def name(self):
+        
+        self._name = f"{self.point.relative_location.city}, {self.point.relative_location.state}"
+        return self._name
+        
 
 class LocationLookback():
     """ Stores locations in order of new -> old"""
@@ -64,6 +65,7 @@ class LocationLookback():
 
     @property
     def history(self):
+        [x.name for x in self.location_history]
         return self.location_history
 
 
@@ -80,11 +82,14 @@ async def weather_page(request: Request, lat:float = 0, lng:float = 0):
     ## do API request to translate into gridpoints
     ## /points/lat,long
     
-    print(requested_location.to_gridpoint())
-    print(requested_location.forecast)
+    print(requested_location.point.forecast)
+    print(requested_location.point.grid_x)
 
     ## do API request to get forecast
     ## /gridpoints/TOP/x,y/forecast
+    print(requested_location.point.cwa)
+    gp:GridpointGeoJson = gridpoint.sync(requested_location.point.cwa, requested_location.point.grid_x, requested_location.point.grid_y, client=client)
+    #print(Gridpoint.from_dict(gp.properties.to_dict()))
 
     return templates.TemplateResponse("location_display.html", {"request":request})
 
