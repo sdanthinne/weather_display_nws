@@ -13,6 +13,7 @@ import json
 from location import LocationLookback, Location
 from client import client
 
+from datetime import datetime
 
 from weather_gov_api_client.api.default import gridpoint
 from weather_gov_api_client.models.gridpoint_geo_json import GridpointGeoJson
@@ -36,7 +37,7 @@ async def weather_page(request: Request, lat:float = 0, lng:float = 0):
 
     ## do API request to get forecast
     ## /gridpoints/TOP/x,y/forecast
-    return templates.TemplateResponse("location_display.html", {"request":request, "location":requested_location})
+    return templates.TemplateResponse("location_display.html", {"request":request, "location":requested_location, "datetime" : datetime})
 
 @app.get("/", response_class=HTMLResponse)
 async def base_page(request: Request):

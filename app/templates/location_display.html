@@ -19,12 +19,7 @@
 </style>
 <div>
     <div class="main_div_style">
-        Weather Office: 
-        {{ location.point.cwa }} 
-        <br>
-        Coordinates:: X: {{ location.point.grid_x }} Y: {{ location.point.grid_y }}
-        <br>
-        {{ location.relative_location.city }}, {{ location.relative_location.state }}
+        {{ location.relative_location.city }}, {{ location.relative_location.state }} | Updated at {{ datetime.now().strftime("%A, %B %d at %I:%M%p") }}
 
     </div>
     <div class="main_div_style">
