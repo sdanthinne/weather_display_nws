@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 
 from dataclasses import dataclass
+from functools import cached_property
 
 from fastapi import FastAPI, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 import logging
+import json
 
 from weather_gov_api_client import Client
+
+from http import HTTPStatus
 
 from weather_gov_api_client.api.default import point
 from weather_gov_api_client.models.point import Point
@@ -16,6 +20,8 @@ from weather_gov_api_client.models.point_geo_json import PointGeoJson
 from weather_gov_api_client.api.default import gridpoint
 from weather_gov_api_client.models.gridpoint_geo_json import GridpointGeoJson
 from weather_gov_api_client.models.gridpoint import Gridpoint
+
+from weather_gov_api_client.models.relative_location import RelativeLocation
 
 logger = logging.getLogger()
 
@@ -27,25 +33,39 @@ client = Client(base_url="https://api.weather.gov/", headers = {"User-Agent":"(w
 class Location():
     longitude: int
     latitude: int
+
+    def __post_init__(self):
+        try:
+            self._name = f"{self.relative_location.city}, {self.relative_location.state}"
+        except Exception as e:
+            self._name = f"Unsearchable location"
     
+    @cached_property
+    def relative_location(self) -> RelativeLocation:
+        return RelativeLocation.from_dict(self.point.relative_location.properties.to_dict())
+
     @property
     def format(self):
         return  [format(x,".4f").rstrip('0') for x in (self.latitude, self.longitude)]
     
     def request(self):
         lat_format, long_format = self.format
-        pt:PointGeoJson = point.sync(f"{lat_format},{long_format}", client=client)
+        res = point.sync_detailed(f"{lat_format},{long_format}", client=client)
+        if res.status_code != HTTPStatus.OK:
+            raise Exception(f"Help! request failed: {res.status_code} : {res.headers}")
+        pt:PointGeoJson = res.parsed
         return pt
 
     @property
-    def point(self) -> Point:
-        pt = self.request()
-        return Point.from_dict(pt.properties.to_dict())
+    def point_geo_json(self) -> PointGeoJson:
+        return self.request()
 
     @property
+    def point(self) -> Point:
+        return Point.from_dict(self.point_geo_json.properties.to_dict())
+
+    @cached_property
     def name(self):
-        
-        self._name = f"{self.point.relative_location.city}, {self.point.relative_location.state}"
         return self._name
         
 
