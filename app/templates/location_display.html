@@ -1,21 +1,66 @@
 {% extends "base.html" %}
 {% block content %}
 <meta http-equiv="refresh" content="600">
+<style>
+.main_div_style {
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+}
+
+#weather_table td {
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    padding: 2px;
+}
+</style>
 <div>
-    <table>
-        <tr>
-            <th>Day</th>
-            <th>Low (F)</th>
-            <th>High (F)</th>
-            <th>Precipitation</th>
-            <th>Wind</th>
-        </tr>
-        {% for predict in predict_days %}
-        <tr>
-            <td></td>
-        </tr>
-        {% endfor %}
-    </table>
+    <div class="main_div_style">
+        Weather Office: 
+        {{ location.point.cwa }} 
+        <br>
+        Coordinates:: X: {{ location.point.grid_x }} Y: {{ location.point.grid_y }}
+        <br>
+        {{ location.relative_location.city }}, {{ location.relative_location.state }}
+
+    </div>
+    <div class="main_div_style">
+        <table id="weather_table">
+            <tr>
+                <th></th>
+                <th>Temperature</th>
+                <th>Precipitation</th>
+                <th>Wind</th>
+                <th></th>
+            </tr>
+            {% for period in location.gridpoint_forecast.periods %}
+            <tr>
+                <td>
+                {{ period.name }}
+                </td>
+                <td>
+                    {{ period.temperature }} {{ period.temperature_unit }} {% if period.temperature_trend %} {{ period.temperature_trend }} {% endif %}
+                </td>
+                <td>
+                    {% if period.probability_of_precipitation.value %}
+                    {{ period.probability_of_precipitation.value }}%
+                    {% else %}
+                    0%
+                    {% endif %}
+                </td>
+                <td>
+                    {{ period.wind_speed }}
+                </td>
+                <td>
+                    {{ period.detailed_forecast }}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 </div>
 
 
