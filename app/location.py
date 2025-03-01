@@ -90,11 +90,22 @@ class LocationLookback():
         self.location_history:list(Location) = [Location(0,0) for _ in range(location_lookback_length)]
         self.location_lookback_length = location_lookback_length
 
+    def has_location(self, location: Location) -> bool:
+        for stored_location in self.location_history:
+            if location == stored_location:
+                return True
+        return False
+
     def add_location(self, location: Location):
-        ## maybe want conversion to city?
+        if self.has_location(location):
+            ## bump to top of list
+            self.location_history.remove(location)
+            self.location_history.insert(0,location)
+            return
+
         if len(self.location_history) > self.location_lookback_length:
-            # remove oldest location
             self.location_history.pop()
+
         self.location_history.insert(0, location)
 
     @property
