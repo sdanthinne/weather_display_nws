@@ -37,7 +37,15 @@ async def weather_page(request: Request, lat:float = 0, lng:float = 0):
 
     ## do API request to get forecast
     ## /gridpoints/TOP/x,y/forecast
-    return templates.TemplateResponse("location_display.html", {"request":request, "location":requested_location, "datetime" : datetime})
+    trp = None
+
+    try:
+        trp = templates.TemplateResponse("location_display.html", {"request":request, "location":requested_location, "datetime" : datetime})
+    except Exception as e:
+        logger.info("Weather not available for location, template rendering raised Exception")
+        logger.debug(e)
+        return templates.TemplateResponse("not_available.html", {"request":request, "location":requested_location, "datetime" : datetime})
+    return trp
 
 @app.get("/", response_class=HTMLResponse)
 async def base_page(request: Request):

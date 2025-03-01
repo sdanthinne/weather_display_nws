@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<meta http-equiv="refresh" content="600">
+<style>
+.main_div_style {
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px;
+    margin: 5px;
+}
+
+#weather_table td {
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    padding: 2px;
+}
+</style>
+<div>
+    <div class="main_div_style">
+        {{ location.relative_location.city }}, {{ location.relative_location.state }} | Updated at {{ datetime.now().strftime("%A, %B %d at %I:%M%p") }}
+    </div>
+    <div>
+        Weather not available for this location!
+    </div>
+</div>
+
+
+{% endblock %}
