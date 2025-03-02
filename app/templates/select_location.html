@@ -26,22 +26,38 @@
     #base {
         flex-direction: row;
     }
+    .big-wide-button {
+        height: 100%;
+    }
 
 }
 #base {
     display: flex;
 }
-.big-wide-button {
-    width: 100%;
-    padding 50px;
+
+.generic-button {
     text-decoration: none;
     cursor: pointer;
     color: black;
-    background-color: lightgreen;
+    background-color: darkgrey;
+    border-radius: 10px;
+}
+
+.big-wide-button {
+    width: 100%;
+    padding 50px;
     height: 80px;
 }
+
 #history-list {
     text-align: center;
+    border: 1px solid black;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 5px;
+}
+.history-location-button {
+    padding: 10px;
 }
 </style>
 
@@ -51,7 +67,7 @@
     <form action="/display" method="GET">
         <input type="hidden" id="lat" name="lat" required />
         <input type="hidden" id="lng" name="lng" required />
-        <button type="submit" class="big-wide-button">Get Weather</button>
+        <button type="submit" class="big-wide-button generic-button">get weather from location</button>
     </form>
 
     <div id="history-list">
@@ -62,7 +78,7 @@
     <form action="/display" method="GET">
             <input type="hidden" id="lat" name="lat" required value="{{location.latitude}}"/>
             <input type="hidden" id="lng" name="lng" required value="{{location.longitude}}"/>
-            <button type="submit">{{location._name}}</button>
+            <button type="submit" class="history-location-button generic-button">{{location._name}}</button>
     </form>
     {% endfor %}
     </div>
