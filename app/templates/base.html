@@ -3,8 +3,18 @@
 :root {
         height: 100vh;
 }
-.page-title {
-    font-size: 24pt;
+
+@media (min-width: 1001px) {
+    .page-title {
+        display: normal;
+        font-size: 24pt;
+    }
+}
+@media (max-width: 1000px) {
+    .page-title {
+        display: none;
+        font-size: 24pt;
+    }
 }
 </style>
 <html>
