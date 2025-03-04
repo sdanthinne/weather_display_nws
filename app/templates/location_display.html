@@ -2,6 +2,31 @@
 {% block content %}
 <meta http-equiv="refresh" content="600">
 <style>
+@media(min-width: 1001px) {
+
+}
+
+@media(max-width: 1000px) {
+    #weather_table tr > *:nth-child(5) {
+            display: none;
+            background-color: black;
+    }
+    #weather_table {
+        width: 100%;
+        font-size: 2rem;
+    }
+    .title-bar {
+        font-size: 1.5rem;
+    }
+}
+#weather_table td {
+    border: 1px solid black;
+    border-radius: 5px;
+    text-align: center;
+    padding: 2px;
+}
+
+
 .main_div_style {
     border: 1px solid black;
     border-radius: 5px;
@@ -10,15 +35,9 @@
     margin: 5px;
 }
 
-#weather_table td {
-    border: 1px solid black;
-    border-radius: 5px;
-    text-align: center;
-    padding: 2px;
-}
 </style>
 <div>
-    <div class="main_div_style">
+    <div class="main_div_style title-bar">
         {{ location.relative_location.city }}, {{ location.relative_location.state }} | Updated at {{ datetime.now().strftime("%A, %B %d at %I:%M%p") }}
 
     </div>
