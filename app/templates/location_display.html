@@ -3,20 +3,25 @@
 <meta http-equiv="refresh" content="600">
 <style>
 @media(min-width: 1001px) {
-
+    #weather_table tbody > :nth-child(2) {
+            display: none;
+    }
 }
 
 @media(max-width: 1000px) {
     #weather_table tr > *:nth-child(5) {
             display: none;
-            background-color: black;
     }
+    #weather_table tbody :nth-child(1) {
+            display: none;
+    }
+
     #weather_table {
         width: 100%;
-        font-size: 2rem;
+        font-size: 3rem;
     }
     .title-bar {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
 }
 #weather_table td {
@@ -47,6 +52,13 @@
                 <th></th>
                 <th>Temperature</th>
                 <th>Precipitation</th>
+                <th>Wind</th>
+                <th></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th>Temp.</th>
+                <th>Precip.</th>
                 <th>Wind</th>
                 <th></th>
             </tr>
