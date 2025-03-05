@@ -2,10 +2,18 @@
 
 ## Getting Started
 
-## Idea Board
+### Dev environment
+To set up this container, you should be able to run:
 
-Have map selector as homepage (using leaflet)
+```
+python3 -m venv .venv ; ./.venv/bin/activate
+pip install -r requirements.txt
+cd weather-gov-api-client ; pip install . ; cd ..
+cd app ; fastapi dev main.py
+```
 
-Also have some sort of "history" for all selected locations with 10-location look-back (global) so that we can search on the local, and then look at the remote
+### Production environment
 
+## Concept
 
+This is a simple shim and template generator so that you can access ad-free and bloat free weather for any location in the US. It uses weather.gov's API to request forecast for a given location.
